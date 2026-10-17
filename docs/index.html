@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="taller-repo" content="elcufu1/taller-descargas" />
+  <title>Taller — Descargar</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #07111c;
+      --card: rgba(16, 32, 51, 0.82);
+      --line: rgba(34, 211, 238, 0.45);
+      --teal: #22d3ee;
+      --ink: #e7fbff;
+      --muted: #9fb4c4;
+      --pink: #f9a8d4;
+    }
+    * { box-sizing: border-box; }
+    [hidden] { display: none !important; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Segoe UI", "Avenir Next", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(900px 420px at 10% -10%, rgba(34, 211, 238, 0.18), transparent 60%),
+        radial-gradient(700px 380px at 110% 0%, rgba(249, 168, 212, 0.12), transparent 55%),
+        var(--bg);
+    }
+    main {
+      width: min(980px, calc(100% - 2rem));
+      margin: 0 auto;
+      padding: 2.5rem 0 3rem;
+    }
+    header { display: flex; justify-content: space-between; gap: 1rem; align-items: flex-start; }
+    h1 { margin: 0; font-size: clamp(2rem, 4vw, 3.2rem); letter-spacing: -0.04em; }
+    h1 span { color: var(--teal); }
+    p { line-height: 1.5; }
+    .lede { max-width: 38rem; color: var(--muted); font-weight: 650; }
+    .lang {
+      border: 1px solid var(--line);
+      background: transparent;
+      color: var(--ink);
+      border-radius: 999px;
+      padding: 0.55rem 0.9rem;
+      font-weight: 800;
+      cursor: pointer;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+    .card {
+      border: 1px solid var(--line);
+      border-radius: 1.4rem;
+      background: var(--card);
+      box-shadow: 0 0 32px rgba(34, 211, 238, 0.12);
+      padding: 1.1rem;
+      backdrop-filter: blur(10px);
+    }
+    .card h2 { margin: 0 0 0.8rem; font-size: 1.15rem; }
+    a.btn, span.btn {
+      display: block;
+      text-align: center;
+      text-decoration: none;
+      border-radius: 1rem;
+      padding: 0.85rem 0.7rem;
+      font-weight: 800;
+      background: var(--teal);
+      color: #04121a;
+    }
+    span.btn { background: #163044; color: var(--muted); }
+    .extra { display: block; margin-top: 0.7rem; color: var(--teal); font-weight: 750; font-size: 0.92rem; }
+    .note { margin-top: 1.4rem; color: var(--muted); font-weight: 650; }
+    .warn { color: var(--pink); font-weight: 800; }
+    @media (max-width: 800px) {
+      .grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <div>
+        <h1><span>Taller</span></h1>
+        <p class="lede" data-i18n="lede">El editor para crear el juego en el ordenador y probarlo en el teléfono.</p>
+      </div>
+      <button class="lang" type="button" id="lang">English</button>
+    </header>
+    <p class="note" id="status">Buscando la última versión publicada…</p>
+    <section class="grid" aria-label="Descargas">
+      <article class="card">
+        <h2 data-i18n="win">Windows</h2>
+        <a class="btn" id="win" href="#" hidden data-i18n="winBtn">Descargar</a>
+        <span class="btn" id="win-wait" data-i18n="wait">Aún no está</span>
+        <a class="extra" id="win-extra" href="#" hidden data-i18n="portable">Versión portátil</a>
+      </article>
+      <article class="card">
+        <h2 data-i18n="mac">Mac</h2>
+        <a class="btn" id="mac" href="#" hidden data-i18n="macBtn">Descargar</a>
+        <span class="btn" id="mac-wait" data-i18n="wait">Aún no está</span>
+        <a class="extra" id="mac-extra" href="#" hidden data-i18n="intel">Mac Intel</a>
+      </article>
+      <article class="card">
+        <h2 data-i18n="linux">Linux</h2>
+        <a class="btn" id="linux" href="#" hidden data-i18n="linuxBtn">Descargar</a>
+        <span class="btn" id="linux-wait" data-i18n="wait">Aún no está</span>
+        <a class="extra" id="linux-extra" href="#" hidden data-i18n="deb">Paquete deb</a>
+      </article>
+    </section>
+    <p class="note" data-i18n="draft">Un borrador no sale aquí. Aparece cuando el dueño lo publica.</p>
+    <p class="note"><a id="all" class="extra" href="#" data-i18n="all">Ver todas las versiones</a></p>
+  </main>
+  <script>
+    const copy = {
+      es: {
+        title: "Taller — Descargar",
+        lede: "El editor para crear el juego en el ordenador y probarlo en el teléfono.",
+        loading: "Buscando la última versión publicada…",
+        empty: "Todavía no hay una versión publicada.",
+        missing: "En la página, cambia elcufu1/taller-descargas por el repositorio real.",
+        fail: "No se pudo leer la versión. Prueba de nuevo en un rato.",
+        win: "Windows",
+        mac: "Mac",
+        linux: "Linux",
+        winBtn: "Descargar para Windows",
+        macBtn: "Descargar para Mac",
+        linuxBtn: "Descargar para Linux",
+        wait: "Aún no está",
+        portable: "Versión portátil",
+        intel: "Mac Intel",
+        deb: "Paquete deb",
+        draft: "Un borrador no sale aquí. Aparece cuando el dueño lo publica. Windows va sin firma.",
+        all: "Ver todas las versiones",
+        button: "English"
+      },
+      en: {
+        title: "Taller — Download",
+        lede: "The editor for making the game on a computer and trying it on a phone.",
+        loading: "Looking for the latest published version…",
+        empty: "There is no published version yet.",
+        missing: "In this page, change elcufu1/taller-descargas to the real repository.",
+        fail: "The version could not be read. Try again in a little while.",
+        win: "Windows",
+        mac: "Mac",
+        linux: "Linux",
+        winBtn: "Download for Windows",
+        macBtn: "Download for Mac",
+        linuxBtn: "Download for Linux",
+        wait: "Not here yet",
+        portable: "Portable build",
+        intel: "Intel Mac",
+        deb: "deb package",
+        draft: "A draft does not show up here. It appears when the owner publishes it. Windows is unsigned.",
+        all: "See every version",
+        button: "Español"
+      }
+    };
+
+    const repo = document.querySelector('meta[name="taller-repo"]').content.trim();
+    const langButton = document.getElementById("lang");
+    const status = document.getElementById("status");
+    let lang = localStorage.getItem("taller.download.lang") === "en" ? "en" : "es";
+    let statusMode = "loading";
+    let statusName = "";
+
+    function paintStatus() {
+      const text = copy[lang];
+      const known = { loading: text.loading, empty: text.empty, missing: text.missing, fail: text.fail };
+      status.textContent = statusMode === "name" ? statusName : known[statusMode];
+      status.classList.toggle("warn", statusMode === "missing" || statusMode === "fail");
+    }
+
+    function apply(next) {
+      lang = next;
+      localStorage.setItem("taller.download.lang", lang);
+      document.documentElement.lang = lang;
+      const text = copy[lang];
+      document.title = text.title;
+      document.querySelectorAll("[data-i18n]").forEach((node) => {
+        const key = node.getAttribute("data-i18n");
+        if (text[key]) node.textContent = text[key];
+      });
+      langButton.textContent = text.button;
+      paintStatus();
+    }
+
+    function show(id, href) {
+      const link = document.getElementById(id);
+      const wait = document.getElementById(id + "-wait");
+      if (href) {
+        link.href = href;
+        link.hidden = false;
+        if (wait) wait.hidden = true;
+      }
+    }
+
+    function extra(id, href) {
+      const link = document.getElementById(id);
+      if (!href) return;
+      link.href = href;
+      link.hidden = false;
+    }
+
+    langButton.addEventListener("click", () => apply(lang === "es" ? "en" : "es"));
+    apply(lang);
+    document.getElementById("all").href = "https://github.com/" + repo + "/releases";
+
+    if (!repo || repo.includes("TU_USUARIO")) {
+      statusMode = "missing";
+      paintStatus();
+    } else {
+      fetch("https://api.github.com/repos/" + repo + "/releases/latest")
+        .then((response) => {
+          if (response.status === 404) return null;
+          if (!response.ok) throw new Error("release");
+          return response.json();
+        })
+        .then((release) => {
+          const assets = release && Array.isArray(release.assets) ? release.assets : [];
+          const by = (test) => {
+            const found = assets.find(test);
+            return found ? found.browser_download_url : "";
+          };
+          const macArm = by((file) => file.name.endsWith(".dmg") && file.name.includes("arm64"));
+          const macIntel = by((file) => file.name.endsWith(".dmg") && (file.name.includes("x64") || file.name.includes("x86_64")));
+          const macAny = by((file) => file.name.endsWith(".dmg"));
+          show("win", by((file) => file.name.endsWith(".exe") && !file.name.includes("portable")));
+          extra("win-extra", by((file) => file.name.endsWith(".exe") && file.name.includes("portable")));
+          show("mac", macArm || macAny);
+          if (macIntel && macIntel !== (macArm || macAny)) extra("mac-extra", macIntel);
+          show("linux", by((file) => file.name.endsWith(".AppImage")));
+          extra("linux-extra", by((file) => file.name.endsWith(".deb")));
+          if (assets.length) {
+            statusMode = "name";
+            statusName = release.name || release.tag_name || "";
+          } else {
+            statusMode = "empty";
+          }
+          paintStatus();
+        })
+        .catch(() => {
+          statusMode = "fail";
+          paintStatus();
+        });
+    }
+  </script>
+</body>
+</html>
